@@ -1,0 +1,23 @@
+.level-button {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    border-radius: 15px;
+    background-color: #D3D3D3;
+    border-width: 0;
+    border-bottom-width: 5px;
+    border-color: #A9A9A9;
+    font-size: 35px;
+    -unity-font-style: bold;
+    color: #4A4A4A;
+}
+
+.level-button:hover {
+    background-color: #E0E0E0;
+}
+
+.level-button-active {
+    background-color: #FFB332;
+    border-color: #D48E00;
+    color: white;
+}

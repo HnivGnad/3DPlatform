@@ -1,0 +1,41 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Root" style="flex-grow: 1; background-color: rgba(0, 180, 255, 0.4);">
+        
+        <!-- HOME SCREEN -->
+        <ui:VisualElement name="HomeScreen" style="flex-grow: 1; align-items: center; justify-content: space-between; padding: 50px;">
+            <ui:VisualElement style="align-items: center;">
+                <ui:Label text="Die" style="-unity-font-style: bold; font-size: 80px; color: white; -unity-text-outline-width: 3px; -unity-text-outline-color: rgb(0, 120, 255); margin-bottom: -30px;" />
+                <ui:Label text="Again" style="-unity-font-style: bold; font-size: 100px; color: white; -unity-text-outline-width: 3px; -unity-text-outline-color: rgb(0, 120, 255);" />
+            </ui:VisualElement>
+            
+            <ui:VisualElement style="flex-grow: 1; width: 100%; flex-direction: row; align-items: center; justify-content: space-between;">
+                <!-- Left Section -->
+                <ui:VisualElement style="width: 150px; height: 60px; background-color: white; border-radius: 5px; align-items: center; justify-content: center;">
+                    <ui:Label text="Hack" style="color: gray; font-size: 25px; -unity-font-style: bold;" />
+                </ui:VisualElement>
+                
+                <!-- Center (Empty for 3D Character) -->
+                <ui:VisualElement style="flex-grow: 1;" />
+                
+                <!-- Right Section (Skins) -->
+                <ui:VisualElement style="width: 120px; height: 120px; background-color: rgb(0, 180, 255); border-radius: 20px; align-items: center; justify-content: center; border-width: 4px; border-color: white; border-bottom-width: 10px;">
+                    <ui:Label text="Skins" style="color: white; -unity-font-style: bold; font-size: 20px; margin-top: 70px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:Button name="PlayButton" text="▶ Play" style="width: 320px; height: 110px; font-size: 50px; border-radius: 30px; background-color: rgb(255, 179, 50); color: white; -unity-font-style: bold; border-bottom-width: 12px; border-color: rgb(212, 142, 0); margin-bottom: 20px;" />
+        </ui:VisualElement>
+
+        <!-- LEVEL SELECTION SCREEN -->
+        <ui:VisualElement name="LevelSelectScreen" style="flex-grow: 1; align-items: center; padding: 40px; display: none; background-color: rgba(0, 180, 255, 0.4);">
+            <ui:Button name="BackButton" text="⬅" style="position: absolute; left: 40px; top: 40px; width: 80px; height: 80px; font-size: 40px; border-radius: 20px; background-color: white; color: rgb(0, 150, 255); -unity-font-style: bold; border-width: 0; border-bottom-width: 6px; border-color: rgb(220, 220, 220);" />
+            
+            <ui:Label text="Die Again" style="-unity-font-style: bold; font-size: 50px; color: white; -unity-text-outline-width: 2px; -unity-text-outline-color: rgb(0, 150, 255); margin-bottom: 20px;" />
+            
+            <ui:ScrollView style="width: 90%; flex-grow: 1;">
+                <ui:VisualElement name="LevelGrid" style="flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; padding: 20px;" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>
