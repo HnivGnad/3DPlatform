@@ -9,6 +9,7 @@ public class PlayerIdleState : EntityState
     public override void Enter()
     {
         base.Enter();
+        player.SetVelocity(0, player.rb.linearVelocity.y, 0);
     }
 
     public override void Update()

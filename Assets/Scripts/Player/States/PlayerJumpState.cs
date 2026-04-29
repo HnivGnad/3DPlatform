@@ -10,9 +10,8 @@ public class PlayerJumpState : EntityState
     {
         base.Enter();
         
-        // Thực hiện nhảy bằng cách thêm lực hướng lên
-        player.rb.linearVelocity = new Vector3(player.rb.linearVelocity.x, 0, player.rb.linearVelocity.z);
-        player.rb.AddForce(Vector3.up * player.jumpForce, ForceMode.Impulse);
+        // Thực hiện nhảy bằng SetVelocity
+        player.SetVelocity(player.rb.linearVelocity.x, player.jumpForce, player.rb.linearVelocity.z);
     }
 
     public override void Update()
@@ -24,11 +23,16 @@ public class PlayerJumpState : EntityState
 
         if (movement != Vector3.zero)
         {
-            player.transform.position += movement * player.moveSpeed * Time.deltaTime;
+            player.SetVelocity(movement.x * player.moveSpeed, player.rb.linearVelocity.y, movement.z * player.moveSpeed);
 
             // Xoay nhân vật trên không
             Quaternion targetRotation = Quaternion.LookRotation(movement);
             player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * player.rotationSpeed);
+        }
+        else
+        {
+            // Dừng di chuyển ngang khi không có input trên không
+            player.SetVelocity(0, player.rb.linearVelocity.y, 0);
         }
 
         // Nếu vận tốc Y < 0 (đang rơi) và chạm đất thì quay lại Idle hoặc Move

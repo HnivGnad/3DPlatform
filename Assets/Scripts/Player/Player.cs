@@ -73,14 +73,14 @@ public class Player : MonoBehaviour
         StateMachine.CurrentState.Update();
     }
 
-
-
-
-
-
     public bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, whatIsGround);
+    }
+
+    public void SetVelocity(float _xVelocity, float _yVelocity, float _zVelocity)
+    {
+        rb.linearVelocity = new Vector3(_xVelocity, _yVelocity, _zVelocity);
     }
 
     private void OnDrawGizmos()

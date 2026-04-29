@@ -19,12 +19,17 @@ public class PlayerMoveState : EntityState
         
         if (movement != Vector3.zero)
         {
-            // Di chuyển vị trí
-            player.transform.position += movement * player.moveSpeed * Time.deltaTime;
+            // Di chuyển bằng velocity
+            player.SetVelocity(movement.x * player.moveSpeed, player.rb.linearVelocity.y, movement.z * player.moveSpeed);
             
             // Xoay nhân vật hướng về phía di chuyển (Dùng Slerp để mượt mà)
             Quaternion targetRotation = Quaternion.LookRotation(movement);
             player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * player.rotationSpeed);
+        }
+        else
+        {
+            // Dừng di chuyển ngang khi không có input
+            player.SetVelocity(0, player.rb.linearVelocity.y, 0);
         }
 
         // Chuyển về Idle nếu không có input
