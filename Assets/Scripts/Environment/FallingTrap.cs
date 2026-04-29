@@ -8,37 +8,39 @@ public class FallingTrap : MonoBehaviour
     public float fallDuration = 1.5f;
     public string playerTag = "Player";
 
-    [Header("Detection (BoxCast Upwards)")]
-    public bool useBoxCast = true;
-    public Vector3 boxSize = new Vector3(1f, 0.5f, 1f); // Kích thước của hộp quét
-    public float detectionHeight = 2f; // Độ cao mà hộp quét bắn lên
+    [Header("Detection Area (Omnidirectional)")]
+    public Vector3 detectionArea = new Vector3(3f, 3f, 3f); // Kích thước vùng cảm biến quanh bẫy
+    public Vector3 detectionOffset = Vector3.zero; // Bù trừ vị trí vùng cảm biến nếu cần
     public LayerMask playerLayer;
 
     private bool hasTriggered = false;
 
     private void Update()
     {
-        if (useBoxCast && !hasTriggered)
+        if (!hasTriggered)
         {
-            CheckForPlayerAbove();
+            CheckOverlapArea();
         }
     }
 
-    private void CheckForPlayerAbove()
+    private void CheckOverlapArea()
     {
-        RaycastHit hit;
-        // Sử dụng BoxCast hướng lên trên để quét một vùng rộng hơn
-        if (Physics.BoxCast(transform.position, boxSize / 2, Vector3.up, out hit, transform.rotation, detectionHeight, playerLayer))
+        // Tạo một vùng hình hộp ảo quanh bẫy để kiểm tra xem Player có đi vào không
+        Collider[] hitColliders = Physics.OverlapBox(transform.position + detectionOffset, detectionArea / 2, transform.rotation, playerLayer);
+        
+        foreach (var hit in hitColliders)
         {
-            if (hit.collider.CompareTag(playerTag))
+            if (hit.CompareTag(playerTag))
             {
                 StartCoroutine(FallRoutine());
+                break;
             }
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Vẫn giữ lại va chạm trực tiếp để chắc chắn
         if (collision.gameObject.CompareTag(playerTag) && !hasTriggered)
         {
             StartCoroutine(FallRoutine());
@@ -48,10 +50,10 @@ public class FallingTrap : MonoBehaviour
     private IEnumerator FallRoutine()
     {
         hasTriggered = true;
-        
-        Debug.Log("<color=red>GAME OVER! Bẫy đã kích hoạt.</color>");
+        Debug.Log("<color=red>GAME OVER! Player đã lọt vào vùng bẫy.</color>");
 
         Vector3 startPosition = transform.position;
+        // Hướng rơi luôn là đi xuống (Vector3.down)
         Vector3 targetPosition = startPosition + Vector3.down * fallDistance;
         float elapsedTime = 0f;
 
@@ -69,18 +71,16 @@ public class FallingTrap : MonoBehaviour
         }
 
         transform.position = targetPosition;
-        Debug.Log("Khối đã rơi xong.");
+        Debug.Log("Bẫy đã rơi xong.");
     }
 
-    // Vẽ BoxCast trong Editor
+    // Vẽ vùng cảm biến trong Editor để dễ quan sát
     private void OnDrawGizmosSelected()
     {
-        if (useBoxCast)
-        {
-            Gizmos.color = Color.yellow;
-            Vector3 center = transform.position + Vector3.up * (detectionHeight / 2);
-            Vector3 size = new Vector3(boxSize.x, detectionHeight, boxSize.z);
-            Gizmos.DrawWireCube(center, size);
-        }
+        Gizmos.color = new Color(0, 1, 0, 0.3f);
+        Gizmos.matrix = Matrix4x4.TRS(transform.position + detectionOffset, transform.rotation, Vector3.one);
+        Gizmos.DrawCube(Vector3.zero, detectionArea);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(Vector3.zero, detectionArea);
     }
 }
