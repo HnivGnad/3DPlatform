@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
     public PlayerJumpState JumpState { get; private set; }
+    public PlayerDieState DieState { get; private set; }
 
     [Header("Movement Detail")]
     public float moveSpeed = 5f;
@@ -18,6 +19,10 @@ public class Player : MonoBehaviour
     public float groundCheckDistance = 0.2f;
     public LayerMask whatIsGround;
     public float rotationSpeed = 10f;
+
+    [Header("Death Settings")]
+    public float deathYLevel = -5f;
+    public bool isDead { get; private set; } = false;
 
     public Rigidbody rb { get; private set; }
 
@@ -32,6 +37,7 @@ public class Player : MonoBehaviour
         IdleState = new PlayerIdleState(this, StateMachine, "Idle");
         MoveState = new PlayerMoveState(this, StateMachine, "Move");
         JumpState = new PlayerJumpState(this, StateMachine, "Jump");
+        DieState = new PlayerDieState(this, StateMachine, "Die");
     }
 
     private void OnEnable()
@@ -70,8 +76,15 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (!isDead && transform.position.y < deathYLevel)
+        {
+            StateMachine.ChangeState(DieState);
+        }
+
         StateMachine.CurrentState.Update();
     }
+
+    public void MarkAsDead() => isDead = true;
 
     public bool IsGrounded()
     {
