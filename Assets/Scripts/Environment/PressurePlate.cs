@@ -8,14 +8,13 @@ public class PressurePlate : MonoBehaviour
     public string boolParameter = "IsPressed";
     
     [Header("Events")]
-    public UnityEvent OnActivated;   // Mở cửa
-    public UnityEvent OnDeactivated; // Đóng cửa
+    public UnityEvent OnActivated;
+    public UnityEvent OnDeactivated;
 
     [SerializeField] private int objectsOnTop = 0;
 
     private void OnTriggerEnter(Collider other)
     {
-        // Cho phép bất kỳ vật thể nào có Collider chạm vào (Player, Đá, v.v.)
         objectsOnTop++;
         
         if (objectsOnTop == 1) 
@@ -39,13 +38,11 @@ public class PressurePlate : MonoBehaviour
     {
         if (buttonAnimator != null) buttonAnimator.SetBool(boolParameter, true);
         OnActivated?.Invoke();
-        Debug.Log("<color=green>Nút đã bị đè!</color>");
     }
 
     private void DeactivatePlate()
     {
         if (buttonAnimator != null) buttonAnimator.SetBool(boolParameter, false);
         OnDeactivated?.Invoke();
-        Debug.Log("<color=yellow>Nút đã nổi lên!</color>");
     }
 }
