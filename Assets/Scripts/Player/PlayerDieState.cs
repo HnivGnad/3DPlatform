@@ -13,13 +13,16 @@ public class PlayerDieState : EntityState
     {
         base.Enter();
         
+        // Luôn reset lại timer mỗi khi chết
+        deathTimer = 2f;
+        
         player.MarkAsDead();
         
         // Giữ lại vận tốc rơi hiện tại, chỉ triệt tiêu di chuyển ngang
         float currentYVelocity = player.rb.linearVelocity.y;
         player.SetVelocity(0, currentYVelocity, 0);
 
-        Debug.Log("<color=red>Player đã chết và đang rơi...</color>");
+        Debug.Log("<color=red>Player đã chết! Đang chờ 2 giây để chuyển sang màn hình Retry...</color>");
     }
 
     public override void Update()
@@ -31,11 +34,26 @@ public class PlayerDieState : EntityState
         if (deathTimer <= 0)
         {
             RestartLevel();
+            // Đặt timer về một số dương lớn để không gọi RestartLevel liên tục
+            deathTimer = 999f; 
         }
     }
 
     private void RestartLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Debug.Log("<color=orange>Đang lưu màn chơi hiện tại và chuyển sang Scene: Retry</color>");
+        
+        // Ghi nhớ màn chơi vừa thua
+        PlayerPrefs.SetInt("LastLevelIndex", SceneManager.GetActiveScene().buildIndex);
+        PlayerPrefs.Save();
+
+        if (SceneFader.Instance != null)
+        {
+            SceneFader.Instance.FadeTo("Retry");
+        }
+        else
+        {
+            SceneManager.LoadScene("Retry");
+        }
     }
 }

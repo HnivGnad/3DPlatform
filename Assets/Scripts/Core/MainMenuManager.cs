@@ -33,7 +33,7 @@ public class MainMenuManager : MonoBehaviour
         _levelGrid = root.Q<VisualElement>("LevelGrid");
 
         // Bind Home Events
-        if (_playButton != null) _playButton.clicked += ShowLevelSelect;
+        if (_playButton != null) _playButton.clicked += () => LoadLevel(1);
 
         // Bind Level Select Events
         if (_backButton != null) _backButton.clicked += ShowHome;
@@ -45,16 +45,12 @@ public class MainMenuManager : MonoBehaviour
     {
         _homeScreen.style.display = DisplayStyle.None;
         _levelSelectScreen.style.display = DisplayStyle.Flex;
-        
-        // Có thể ẩn nhân vật 3D ở đây nếu cần
     }
 
     private void ShowHome()
     {
         _homeScreen.style.display = DisplayStyle.Flex;
         _levelSelectScreen.style.display = DisplayStyle.None;
-        
-        // Hiện lại nhân vật 3D
     }
 
     private void GenerateLevelGrid(int count)
@@ -67,15 +63,9 @@ public class MainMenuManager : MonoBehaviour
             Button levelBtn = new Button();
             levelBtn.text = i.ToString();
             levelBtn.name = $"LevelBtn_{i}";
-            
-            // Sử dụng các class đã định nghĩa trong USS
             levelBtn.AddToClassList("level-button");
             
-            // Đánh dấu Level 1 là active (màu cam)
-            if (i == 1)
-            {
-                levelBtn.AddToClassList("level-button-active");
-            }
+            if (i == 1) levelBtn.AddToClassList("level-button-active");
 
             int levelIndex = i;
             levelBtn.clicked += () => LoadLevel(levelIndex);
@@ -86,19 +76,60 @@ public class MainMenuManager : MonoBehaviour
 
     private void LoadLevel(int index)
     {
-        string sceneName = "Level" + index;
-        Debug.Log($"Đang tải màn chơi: {sceneName}");
+        Debug.Log($"Đang tải màn chơi: Level {index}");
         
-        if (Application.CanStreamedLevelBeLoaded(sceneName))
+        // Sử dụng SceneFader nếu có để chuyển cảnh mượt mà
+        if (SceneFader.Instance != null)
         {
-            SceneManager.LoadScene(sceneName);
+            SceneFader.Instance.FadeTo(index);
         }
         else
         {
-            Debug.LogWarning($"Màn chơi {sceneName} chưa được tạo hoặc chưa thêm vào Build Settings!");
-            
-            // Nếu chưa có các màn khác, tạm thời cho load Level1 để test
-            if (index > 1) SceneManager.LoadScene("Level1");
+            // Fallback nếu không có Fader (nạp theo tên Level1, Level2...)
+            SceneManager.LoadScene("Level" + index);
+        }
+    }
+
+    // Hàm public để gọi từ Button (UGUI)
+    public void StartGame()
+    {
+        LoadLevel(1);
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("<color=red>Đang thoát game...</color>");
+        Application.Quit();
+    }
+
+    public void RetryLevel()
+    {
+        // Đọc lại màn chơi vừa thua (mặc định là Level 1 nếu không tìm thấy)
+        int lastLevel = PlayerPrefs.GetInt("LastLevelIndex", 1);
+        
+        Debug.Log($"<color=yellow>Đang tải lại màn chơi cũ: Index {lastLevel}</color>");
+
+        if (SceneFader.Instance != null)
+        {
+            SceneFader.Instance.FadeTo(lastLevel);
+        }
+        else
+        {
+            SceneManager.LoadScene(lastLevel);
+        }
+    }
+
+    public void GoHome()
+    {
+        Debug.Log("<color=white>Quay về Lobby UI...</color>");
+        
+        if (SceneFader.Instance != null)
+        {
+            SceneFader.Instance.FadeTo("Lobby UI");
+        }
+        else
+        {
+            SceneManager.LoadScene("Lobby UI");
         }
     }
 }

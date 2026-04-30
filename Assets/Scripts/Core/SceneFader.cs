@@ -21,7 +21,6 @@ public class SceneFader : MonoBehaviour
             if (fadeImage != null)
             {
                 fadeImage.color = new Color(0, 0, 0, 1);
-                // Đảm bảo Image nhận va chạm để chặn người chơi bấm linh tinh khi đang chuyển cảnh
                 fadeImage.raycastTarget = true; 
             }
         }
@@ -53,6 +52,12 @@ public class SceneFader : MonoBehaviour
         StartCoroutine(FadeOut(sceneIndex));
     }
 
+    public void FadeTo(string sceneName)
+    {
+        StopAllCoroutines();
+        StartCoroutine(FadeOut(sceneName));
+    }
+
     private IEnumerator FadeOut(int index)
     {
         float timer = 0f;
@@ -65,6 +70,20 @@ public class SceneFader : MonoBehaviour
         }
         
         SceneManager.LoadScene(index);
+    }
+
+    private IEnumerator FadeOut(string sceneName)
+    {
+        float timer = 0f;
+        while (timer < fadeDuration)
+        {
+            timer += Time.deltaTime;
+            if (fadeImage != null)
+                fadeImage.color = new Color(0, 0, 0, timer / fadeDuration);
+            yield return null;
+        }
+        
+        SceneManager.LoadScene(sceneName);
     }
 
     private IEnumerator FadeIn()
@@ -81,7 +100,7 @@ public class SceneFader : MonoBehaviour
         if (fadeImage != null)
         {
             fadeImage.color = new Color(0, 0, 0, 0);
-            fadeImage.raycastTarget = false; // Tắt chặn bấm khi đã sáng lại
+            fadeImage.raycastTarget = false; 
         }
     }
 }

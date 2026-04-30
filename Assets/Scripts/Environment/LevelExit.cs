@@ -47,7 +47,7 @@ public class LevelExit : MonoBehaviour
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIndex = currentSceneIndex + 1;
 
-        // Nếu còn màn tiếp theo thì tải, nếu không thì quay về Menu
+        // Nếu còn màn tiếp theo thì tải, nếu không thì quay về Lobby UI
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
             if (SceneFader.Instance != null)
@@ -57,12 +57,12 @@ public class LevelExit : MonoBehaviour
         }
         else
         {
-            Debug.Log("<color=green>Đã hết màn chơi! Quay về Main Menu.</color>");
+            Debug.Log("<color=green>Đã hết màn chơi! Quay về Lobby UI.</color>");
             
             if (SceneFader.Instance != null)
-                SceneFader.Instance.FadeTo(0);
+                SceneFader.Instance.FadeTo("Lobby UI");
             else
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene("Lobby UI");
         }
     }
 }
