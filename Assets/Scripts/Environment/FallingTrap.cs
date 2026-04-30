@@ -40,10 +40,20 @@ public class FallingTrap : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Vẫn giữ lại va chạm trực tiếp để chắc chắn
-        if (collision.gameObject.CompareTag(playerTag) && !hasTriggered)
+        if (collision.gameObject.CompareTag(playerTag))
         {
-            StartCoroutine(FallRoutine());
+            // Gọi lệnh chết cho người chơi
+            Player player = collision.gameObject.GetComponent<Player>();
+            if (player != null)
+            {
+                player.Die();
+            }
+
+            // Kích hoạt rơi nếu chưa rơi
+            if (!hasTriggered)
+            {
+                StartCoroutine(FallRoutine());
+            }
         }
     }
 

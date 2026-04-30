@@ -5,7 +5,10 @@ public class LevelExit : MonoBehaviour
 {
     [Header("Settings")]
     public string playerTag = "Player";
-    public float delayBeforeLoad = 0.5f;
+    public float delayBeforeLoad = 1.5f; // Tăng thêm chút thời gian để xem Particle
+
+    [Header("Visual Effects")]
+    public ParticleSystem winParticles;
 
     private bool isTransitioning = false;
 
@@ -15,7 +18,26 @@ public class LevelExit : MonoBehaviour
         if (other.CompareTag(playerTag) && !isTransitioning)
         {
             isTransitioning = true;
-            Debug.Log("<color=cyan>Đang chuyển sang màn tiếp theo...</color>");
+
+            // Khóa di chuyển của Player
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
+                player.MarkAsDead();
+                player.SetVelocity(0, 0, 0);
+            }
+
+            // Chạy hiệu ứng hạt nếu có
+            if (winParticles != null)
+            {
+                winParticles.Play();
+            }
+
+            // Phát âm thanh chiến thắng
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayWinSound();
+
+            Debug.Log("<color=cyan>Chiến thắng! Đã khóa di chuyển và đang chuyển màn...</color>");
             Invoke("LoadNextLevel", delayBeforeLoad);
         }
     }
@@ -28,12 +50,19 @@ public class LevelExit : MonoBehaviour
         // Nếu còn màn tiếp theo thì tải, nếu không thì quay về Menu
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
-            SceneManager.LoadScene(nextSceneIndex);
+            if (SceneFader.Instance != null)
+                SceneFader.Instance.FadeTo(nextSceneIndex);
+            else
+                SceneManager.LoadScene(nextSceneIndex);
         }
         else
         {
             Debug.Log("<color=green>Đã hết màn chơi! Quay về Main Menu.</color>");
-            SceneManager.LoadScene(0); // Màn hình chính thường là Index 0
+            
+            if (SceneFader.Instance != null)
+                SceneFader.Instance.FadeTo(0);
+            else
+                SceneManager.LoadScene(0);
         }
     }
 }

@@ -46,7 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelExit
   playerTag: Player
-  delayBeforeLoad: 0.5
+  delayBeforeLoad: 3
+  winParticles: {fileID: 4240034784475640689, guid: 7d05e4127f42c914aa5d5902442e058e, type: 3}
 --- !u!65 &4086549450658388974
 BoxCollider:
   m_ObjectHideFlags: 0

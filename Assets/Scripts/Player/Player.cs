@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
     public LayerMask whatIsGround;
     public float rotationSpeed = 10f;
 
+    [Header("Visual Effects")]
+    public ParticleSystem dustParticles;
+
     [Header("Death Settings")]
     public float deathYLevel = -5f;
     public bool isDead { get; private set; } = false;
@@ -78,17 +81,55 @@ public class Player : MonoBehaviour
     {
         if (!isDead && transform.position.y < deathYLevel)
         {
-            StateMachine.ChangeState(DieState);
+            Die();
         }
 
         StateMachine.CurrentState.Update();
+        HandleDustEffect();
     }
 
-    public void MarkAsDead() => isDead = true;
+    private void HandleDustEffect()
+    {
+        if (dustParticles == null) return;
+
+        if (InputVector.magnitude > 0.1f && IsGrounded() && !isDead)
+        {
+            if (!dustParticles.isPlaying) dustParticles.Play();
+        }
+        else
+        {
+            if (dustParticles.isPlaying) dustParticles.Stop();
+        }
+    }
 
     public bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, whatIsGround);
+    }
+
+    public void MarkAsDead()
+    {
+        isDead = true;
+        
+        if (input != null)
+            input.Disable();
+            
+        InputVector = Vector2.zero;
+    }
+
+    public void Die()
+    {
+        if (isDead) return;
+
+        MarkAsDead();
+
+        if (anim != null)
+            anim.SetTrigger("Die");
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayDeathSound();
+
+        StateMachine.ChangeState(DieState);
     }
 
     public void SetVelocity(float _xVelocity, float _yVelocity, float _zVelocity)
