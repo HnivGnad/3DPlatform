@@ -76,21 +76,16 @@ public class MainMenuManager : MonoBehaviour
 
     private void LoadLevel(int index)
     {
-        Debug.Log($"Đang tải màn chơi: Level {index}");
-        
-        // Sử dụng SceneFader nếu có để chuyển cảnh mượt mà
         if (SceneFader.Instance != null)
         {
             SceneFader.Instance.FadeTo(index);
         }
         else
         {
-            // Fallback nếu không có Fader (nạp theo tên Level1, Level2...)
             SceneManager.LoadScene("Level" + index);
         }
     }
 
-    // Hàm public để gọi từ Button (UGUI)
     public void StartGame()
     {
         LoadLevel(1);
@@ -98,17 +93,12 @@ public class MainMenuManager : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("<color=red>Đang thoát game...</color>");
         Application.Quit();
     }
 
     public void RetryLevel()
     {
-        // Đọc lại màn chơi vừa thua (mặc định là Level 1 nếu không tìm thấy)
         int lastLevel = PlayerPrefs.GetInt("LastLevelIndex", 1);
-        
-        Debug.Log($"<color=yellow>Đang tải lại màn chơi cũ: Index {lastLevel}</color>");
-
         if (SceneFader.Instance != null)
         {
             SceneFader.Instance.FadeTo(lastLevel);
@@ -118,11 +108,8 @@ public class MainMenuManager : MonoBehaviour
             SceneManager.LoadScene(lastLevel);
         }
     }
-
     public void GoHome()
     {
-        Debug.Log("<color=white>Quay về Lobby UI...</color>");
-        
         if (SceneFader.Instance != null)
         {
             SceneFader.Instance.FadeTo("Lobby UI");

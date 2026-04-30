@@ -16,13 +16,8 @@ public class MobileControlAutoHider : MonoBehaviour
             Debug.LogWarning("MobileControlAutoHider: Chưa gán Mobile Canvas!");
             return;
         }
-
-        // Kiểm tra nền tảng để ẩn/hiện
         bool isMobile = CheckIfMobile();
-
         mobileCanvas.SetActive(isMobile);
-
-        // Nếu đang ở trong Editor (để test)
         if (Application.isEditor && forceShowInEditor)
         {
             mobileCanvas.SetActive(true);
@@ -31,10 +26,7 @@ public class MobileControlAutoHider : MonoBehaviour
 
     private bool CheckIfMobile()
     {
-        // 1. Kiểm tra nền tảng thực tế (Android/iOS)
         if (Application.isMobilePlatform) return true;
-
-        // 2. Kiểm tra nếu đang chạy WebGL trên trình duyệt Mobile
         #if UNITY_WEBGL
         return IsMobileUserAgent();
         #endif
@@ -44,7 +36,6 @@ public class MobileControlAutoHider : MonoBehaviour
 
     private bool IsMobileUserAgent()
     {
-        // Kiểm tra thêm một lần nữa cho chắc chắn trên WebGL
         return Application.isMobilePlatform;
     }
 }

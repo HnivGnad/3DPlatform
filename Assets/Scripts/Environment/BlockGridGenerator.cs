@@ -53,7 +53,6 @@ public class BlockGridGenerator : MonoBehaviour
     [ContextMenu("Clear Grid")]
     public void ClearGrid()
     {
-        // Xóa container cũ
         Transform oldContainer = transform.Find("GeneratedGrid");
         if (oldContainer != null)
         {

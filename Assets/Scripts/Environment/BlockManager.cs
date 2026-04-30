@@ -29,7 +29,6 @@ public class BlockManager : MonoBehaviour
             return;
         }
 
-        // Tạo container để quản lý các khối cho gọn Hierarchy
         GameObject container = new GameObject("Ground_Container");
         container.transform.parent = this.transform;
         container.transform.localPosition = Vector3.zero;
@@ -40,8 +39,6 @@ public class BlockManager : MonoBehaviour
             {
                 for (int y = 0; y < depth; y++)
                 {
-                    // Lớp trên cùng (y=0) dùng topPrefab, các lớp dưới dùng bottomPrefab
-                    // Tọa độ Y âm để khối phát triển xuống dưới mặt đất
                     Vector3 spawnPos = new Vector3(
                         (x - width / 2.0f + 0.5f) * blockSize,
                         -y * blockSize,
@@ -65,7 +62,6 @@ public class BlockManager : MonoBehaviour
         Transform container = transform.Find("Ground_Container");
         if (container != null)
         {
-            // Sử dụng DestroyImmediate vì hàm này thường chạy trong Editor
             DestroyImmediate(container.gameObject);
         }
     }

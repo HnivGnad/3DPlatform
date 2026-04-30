@@ -28,7 +28,6 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        // Tự động phát nhạc nền khi vào game
         if (backgroundMusic != null)
             PlayMusic(backgroundMusic);
     }
@@ -48,7 +47,6 @@ public class AudioManager : MonoBehaviour
             sfxSource.PlayOneShot(clip);
     }
 
-    // Các hàm tiện ích để gọi nhanh từ các script khác
     public void PlayWinSound() => PlaySFX(winSFX);
     public void PlayDeathSound() => PlaySFX(deathSFX);
 }
