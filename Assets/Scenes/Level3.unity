@@ -5911,7 +5911,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3303052526028952534, guid: ada7ff39556453645a8f677461c2198d, type: 3}
       propertyPath: forceShowInEditor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3952336442378281558, guid: ada7ff39556453645a8f677461c2198d, type: 3}
       propertyPath: m_Name
@@ -27334,28 +27334,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!64 &7345089123158365292
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9118977110139053001}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: c986c8d17cb30d949b63e9e4eb219d38, type: 3}
 --- !u!64 &7366069302475773903
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -27446,7 +27424,6 @@ GameObject:
   - component: {fileID: 4648554976505742412}
   - component: {fileID: 688800348726039206}
   - component: {fileID: 9173604802158128390}
-  - component: {fileID: 7345089123158365292}
   m_Layer: 0
   m_Name: Grass
   m_TagString: Untagged

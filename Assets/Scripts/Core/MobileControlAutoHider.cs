@@ -9,33 +9,38 @@ public class MobileControlAutoHider : MonoBehaviour
     [Header("Settings")]
     public bool forceShowInEditor = true;
 
-    void Awake()
+    void Start()
     {
-        if (mobileCanvas == null)
-        {
-            Debug.LogWarning("MobileControlAutoHider: Chưa gán Mobile Canvas!");
-            return;
-        }
+        if (mobileCanvas == null) return;
+
         bool isMobile = CheckIfMobile();
-        mobileCanvas.SetActive(isMobile);
+
+        // Ưu tiên: Nếu ở trong Editor và bật ForceShow thì luôn hiện
         if (Application.isEditor && forceShowInEditor)
         {
             mobileCanvas.SetActive(true);
+        }
+        else
+        {
+            mobileCanvas.SetActive(isMobile);
         }
     }
 
     private bool CheckIfMobile()
     {
         if (Application.isMobilePlatform) return true;
+
         #if UNITY_WEBGL
         return IsMobileUserAgent();
-        #endif
-
+        #else
         return false;
+        #endif
     }
 
     private bool IsMobileUserAgent()
     {
-        return Application.isMobilePlatform;
+        // Trên WebGL, SystemInfo.operatingSystem thường chứa tên hệ điều hành của trình duyệt
+        string os = SystemInfo.operatingSystem.ToLower();
+        return os.Contains("iphone") || os.Contains("android") || os.Contains("ipad") || os.Contains("ipod");
     }
 }
